@@ -1,0 +1,212 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="CaseSignDetail.aspx.cs" Inherits="CaseSignDetail" %>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head id="Head1" runat="server">
+    <title>Untitled Page</title>
+     <link href="CSS/css.css" type="text/css" rel="stylesheet">
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	  <script type="text/javascript" src="javascript/jquery.js" ></script>
+      <script type="text/javascript" src="javascript/common.js" ></script>
+     <script>
+ 
+   
+   
+   
+   function refreshPage()
+{
+
+   document.location.href=document.location.href;
+       
+}
+
+  function check()
+    {
+    
+   
+     if (document.all.txtDate.value.Trim()=='')
+    {
+     alert(" 承诺日期<%=Common.StrTable.GetStr("shallnotbenull") %>");
+    return false;
+    }
+     
+    
+    return true;
+    }
+    
+     function checknote()
+    {
+    
+   
+     if (document.all.txtNote.value.Trim()=='')
+    {
+     alert(" 备注<%=Common.StrTable.GetStr("shallnotbenull") %>");
+    return false;
+    }
+        if (document.all.txtType.value =="2" )
+    {
+        if (!isNum(document.all.TextBox1.value.Trim()))
+        {
+         alert("路费不是数字");
+        return false;
+        }
+    }
+    
+    return true;
+    }
+
+ function openHtm(url)
+ {
+
+window.open(url);
+ }
+ 
+ function showDiv(flag)
+ {
+ document.all.txtType.value=flag;
+
+     
+       if(flag==0)
+     {
+     document.all.divpayment.style.display='none';
+      document.all.divNote.style.display='block';
+       document.all.tr1.style.display='none';
+    
+      document.all.span0.innerText="备注";
+      
+    document.all.divHistory.innerHTML=document.all.txtNote0.value;
+      
+     }
+     else if (flag==1)
+     {
+       document.all.divpayment.style.display='none';
+      document.all.divNote.style.display='block';
+         document.all.tr1.style.display='block';
+      
+         document.all.span1.innerText="电话:";
+         document.all.span0.innerText="电话访问记录";
+         
+     document.all.divHistory.innerHTML=document.all.txtNote1.value;
+        
+     }
+     else if (flag==2)
+     {
+       document.all.divpayment.style.display='none';
+      document.all.divNote.style.display='block';
+         document.all.tr1.style.display='block';
+       document.all.span1.innerText="路费:";
+       document.all.span0.innerText="拜访记录";
+       document.all.divHistory.innerHTML=document.all.txtNote2.value;
+     }
+     else if (flag==3)
+     {
+       document.all.divpayment.style.display='block';
+      document.all.divNote.style.display='none';
+     }
+ }
+
+ </script>
+</head>
+<body bgcolor=#F7F7F7>
+    <form id="form1" runat="server">
+    <div runat =server id="divAll">
+    <div>
+   <table  width =100%  border =1 >
+     <tr>
+    <td colspan =2><b> <span  style =" cursor:hand;color:Blue" onclick ="openHtm('<%=HtmlUrl%>')"> <%=CaseUserName%></span></b></td>
+    <td colspan =6 align =right>
+
+   
+    </td>
+    </tr>
+    <tr>
+    <td><b>案件批次</b></td><td><%=PatchName%></td><td><b>最新余额</b></td><td><%=Balance%></td><td><b>过期日期</b></td><td><%=Expiredate%></td><td><b>导入日期</b></td><td><%=Importtime%></td>
+    </tr>
+    </table>
+    </div>
+    <div>
+    <table width =100%  border =1>
+    <%=HtmlContent%>
+    </table>
+    </div>
+    <div>
+     <table id="Table1" width =100%  border =1 runat=server>
+     <tr>
+    <td ><font color="#cc6600" ><b> 承诺还款日期</b></font>
+
+<asp:TextBox ID="txtDate" runat="server" Width =100></asp:TextBox><img src="Images/Calendar.gif"  style=" cursor:hand "  onclick ="ShowCalenderWindow('txtDate')"/><asp:Button ID="btn" runat="server" Text="保存"  OnClientClick="return check();" OnClick="btn_Click" />
+   
+    </td>
+    
+    </tr>
+  
+    </table>
+    </div>
+    <div style="padding-left:5px; height:20px; vertical-align:middle"><font color="#cc6600" ><b > <span  style =" cursor:hand;color:Blue" onclick="showDiv(0)"> <b>备注|</b></span>
+    <span  style =" cursor:hand;color:Blue" onclick="showDiv(1)"> <b>电话访问记录|</b></span>
+    <span  style =" cursor:hand;color:Blue" onclick="showDiv(2)"><b> 拜访记录|</b></span>
+     <span  style =" cursor:hand;color:Blue" onclick="showDiv(3)"><b> 还款记录</b></span>
+    
+    </b></font></div>
+    
+    <div id="divpayment" style ="display:none">
+     <asp:GridView  Width =100% ID="GridView1" runat="server" OnRowDataBound="GridView1_RowDataBound" 
+        HeaderStyle-CssClass="dg_header"  AutoGenerateColumns =false  >
+             
+         <Columns>
+            
+      
+             <asp:BoundField DataField="tbName" HeaderText ="姓名" />
+             <asp:BoundField DataField="ImportDate" HeaderText ="导入日期"  ItemStyle-Width=200/>
+           
+            
+              <asp:BoundField DataField="tbKey" HeaderText ="帐号" />
+               <asp:BoundField DataField="tbPayment" HeaderText ="还款金额" />
+ <asp:BoundField DataField="tbBalance" HeaderText ="现时金额" />
+
+                
+        </Columns>
+       
+      <EmptyDataTemplate>
+      NO Data
+      </EmptyDataTemplate>
+
+        </asp:GridView>
+    </div>
+    
+    <div id="divNote">
+    <table width =100%   border =1>
+    <tr>
+    <td >
+    <div style =" height:120px; overflow:auto "  runat =server id="divHistory">
+
+    </div>
+    </td>
+  
+     <td  width =200 valign=top  >
+<asp:TextBox ID="txtNote" TextMode=multiLine  runat="server" Width =250 Height ="120px"></asp:TextBox>
+   
+    </td>
+    <td width=200 valign=top>
+    <table width =100% height =90ox>
+      <tr ><td colspan =2><span id="span0" runat =server>备注</span></td></tr>
+    <tr id="tr1" style ="display:none" runat =server><td><span id=span1 runat =server >备注</span></td><td><asp:TextBox ID="TextBox1" runat="server" Width =100></asp:TextBox></td></tr>
+     <tr><td colspan=2 style="height: 24px"><asp:Button ID="btnSaveNote" runat="server" Text="保存"  OnClientClick="return check();" OnClick="btnSaveNote_Click" /></td></tr>
+    </table>
+    
+    </td>
+    
+    </tr></table>
+   
+    </div>
+    <asp:TextBox ID="txtType" style=" display:none" runat="server" Width =120   Text =0 ></asp:TextBox>
+    <asp:TextBox ID="txtNote1" style=" display:none" runat="server" Width =120   Text =0 ></asp:TextBox>
+    <asp:TextBox ID="txtNote2" style=" display:none" runat="server" Width =120   Text =0 ></asp:TextBox>
+    <asp:TextBox ID="txtNote0" style=" display:none" runat="server" Width =120   Text =0 ></asp:TextBox>
+    </div>
+    </form>
+</body>
+</html>
+

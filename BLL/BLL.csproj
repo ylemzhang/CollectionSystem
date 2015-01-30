@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectType>local</ProjectType>
+    <ProjectVersion>7.10.377</ProjectVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A156A81B-4956-49D1-ACBF-412E7512AE9A}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <AssemblyName>BLL</AssemblyName>
+    <OutputType>Library</OutputType>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Global.cs" />
+    <Compile Include="BLL\AnnoumentBLL.cs" />
+    <Compile Include="BLL\CaseTypeDataBLL.cs" />
+    <Compile Include="BLL\PaymentBLL.cs" />
+    <Compile Include="BLL\ReportBLL.cs" />
+    <Compile Include="BLL\SearchRow.cs" />
+    <Compile Include="BLL\NoteBLL.cs" />
+    <Compile Include="BLL\OpenedCaseBLL.cs" />
+    <Compile Include="BLL\AdminBLL.cs" />
+    <Compile Include="BLL\ReadCaseUsersBLL.cs" />
+    <Compile Include="BLL\FieldBLL.cs" />
+    <Compile Include="BLL\GroupBLL.cs" />
+    <Compile Include="BLL\CaseBLL.cs" />
+    <Compile Include="BLL\TypeBLL.cs" />
+    <Compile Include="BLL\SearchBLL.cs" />
+    <Compile Include="BLL\CompanyBLL.cs" />
+    <Compile Include="BLL\CaseTypeBLL.cs" />
+    <Compile Include="BLL\MessageBLL.cs" />
+    <Compile Include="BLL\AlertBLL.cs" />
+    <Compile Include="BLL\LeaveBLL.cs" />
+    <Compile Include="BLL\PatchBLL.cs" />
+    <Compile Include="BLL\BalanceBLL.cs" />
+    <Compile Include="BLL\SystemUser.cs" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{79C87FF8-E5A0-47EB-9355-E6E9C1EE462B}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{B5357A28-74C5-460A-9331-41C09C33F905}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

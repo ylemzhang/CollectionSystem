@@ -1,0 +1,149 @@
+INPUT {
+	FONT-SIZE: 9pt; COLOR: black; FONT-FAMILY: Arial
+}
+TEXTAREA {
+	FONT-SIZE: 9pt; COLOR: black; FONT-FAMILY: Arial
+}
+SELECT {
+	FONT-SIZE: 9pt; COLOR: black; FONT-FAMILY: Arial
+}
+BODY 
+{
+	margin : 0px 0px 0px 0px;
+	FONT-SIZE: 9pt; FONT-FAMILY: Arial;
+	SCROLLBAR-FACE-COLOR: #eeeeee; SCROLLBAR-HIGHLIGHT-COLOR: #ffffff; SCROLLBAR-SHADOW-COLOR: #dee3e7; SCROLLBAR-3DLIGHT-COLOR: #d1d7dc; SCROLLBAR-ARROW-COLOR: #000000; SCROLLBAR-TRACK-COLOR: #ededed; SCROLLBAR-DARKSHADOW-COLOR: #808080
+}
+TABLE {
+	FONT-SIZE: 9pt; FONT-FAMILY: Arial
+}
+
+
+
+FIELDSET {
+	BORDER-RIGHT: #cccccc 1px solid; PADDING-RIGHT: 0px; BORDER-TOP: #cccccc 1px solid; PADDING-LEFT: 0px; BACKGROUND: #ffffff; PADDING-BOTTOM: 8px; BORDER-LEFT: #cccccc 1px solid; WIDTH: 900px; LINE-HEIGHT: 20px; PADDING-TOP: 0px; BORDER-BOTTOM: #cccccc 1px solid
+}
+
+
+A:link {
+	FONT-SIZE: 9pt;  LINE-HEIGHT: 18px; FONT-FAMILY: "arial"; TEXT-DECORATION: none;COLOR: #000
+}
+A:visited {
+	FONT-SIZE: 9pt;  LINE-HEIGHT: 18px; FONT-FAMILY: "arial"; TEXT-DECORATION: none;COLOR: #000
+}
+A:hover {
+	FONT-SIZE: 9pt; LINE-HEIGHT: 18px; FONT-FAMILY: "arial"; TEXT-DECORATION: underline;COLOR: #000
+}
+
+.menu{
+FONT-SIZE: 9pt; COLOR: #000000; LINE-HEIGHT: 18px; FONT-FAMILY: "arial"; WORD-WRAP: break-word;font-weight: bold
+}
+.menu a:link{
+FONT-SIZE: 9pt; COLOR: #000000; LINE-HEIGHT: 18px; FONT-FAMILY: "arial"; WORD-WRAP: break-word;font-weight: bold;TEXT-DECORATION: none
+}
+.menu a:visited{
+FONT-SIZE: 9pt; COLOR: #000000; LINE-HEIGHT: 18px; FONT-FAMILY: "arial"; WORD-WRAP: break-word;font-weight: bold;TEXT-DECORATION: none
+}
+.menu a:hover{
+FONT-SIZE: 9pt; COLOR: #000000; LINE-HEIGHT: 18px; FONT-FAMILY: "arial"; WORD-WRAP: break-word;font-weight: bold;TEXT-DECORATION: underline
+}
+
+.Location{
+FONT-SIZE: 9pt; COLOR: #fff; LINE-HEIGHT: 18px; FONT-FAMILY: "arial"; WORD-WRAP: break-word
+}
+.Location a:link{
+FONT-SIZE: 9pt; COLOR: #fff; LINE-HEIGHT: 18px; FONT-FAMILY: "arial"; WORD-WRAP: break-word;TEXT-DECORATION: none
+}
+.Location a:visited{
+FONT-SIZE: 9pt; COLOR: #fff; LINE-HEIGHT: 18px; FONT-FAMILY: "arial"; WORD-WRAP: break-word;TEXT-DECORATION: none
+}
+.Location a:hover{
+FONT-SIZE: 9pt; COLOR: #fff; LINE-HEIGHT: 18px; FONT-FAMILY: "arial"; WORD-WRAP: break-word;TEXT-DECORATION: underline
+}
+
+.left_menu_bk{
+background-position:top;background-image: url(left_menu_bk.jpg);background-repeat: repeat-x;
+}
+
+
+
+
+.dg_header
+
+{
+
+     border-right: solid;
+
+     border-top: solid;
+
+    font-family:"Arial,Helvetic,sans-serif";
+    
+     font-size :9pt;
+
+    
+     border-left: solid;
+
+     
+    
+     border-bottom: solid;
+
+     background-color :#E7E7FF;
+   text-align:left;
+
+}
+
+.dg_alter
+
+{
+
+background-color :#E7E7FF;
+
+border :solid 1px menu;
+
+font-family:"Arial,Helvetic,sans-serif";
+
+font-size :9pt;
+
+text-align:left;
+
+}
+
+.dg_item
+
+{
+
+text-align:left;
+
+background-color:#F7F7F7 ;
+
+border :solid 1px menu;
+
+font-family:"Arial,Helvetic,sans-serif";
+
+font-size :9pt;
+
+}
+
+
+.tran { 
+      
+      
+        margin-left:5px;
+        margin-right:5
+        /*filter:alpha(opacity=0);*/
+      
+}
+
+
+ .len
+    {
+    width:220px;
+    }
+    .dlllen
+    {
+    width:226px;
+    }
+     .multitext
+    {
+    width:650px;
+    height:50px;
+    }

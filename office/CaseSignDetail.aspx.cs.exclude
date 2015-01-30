@@ -1,0 +1,548 @@
+using System;
+using System.Data;
+using System.Configuration;
+using System.Collections;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using System.Web.UI.HtmlControls;
+
+using System.Text;
+
+public partial class CaseSignDetail : PageBase
+{
+    private string groupTemplete = @" <tr><td colspan={1} ><font  color='#cc6600'><b>{0}</b></font></td></tr>";
+    private string tdTemplete = @" <td width=100px><b>{0}:</b></td><td>{1}</td>";
+    private string trTemplete = @" <tr>{0}</tr>";
+
+    private DataRow ItemRow;
+    private DataTable TbFields;
+    private ArrayList Groups;
+    private StringBuilder SB;
+
+    private int ColumnsCount;
+
+    private string NoteTemplate = @"by <strong>{1}</strong>  {2}  <br/> {3} {0} <br />";
+
+
+
+
+
+
+
+    protected string CaseUserName
+    {
+        get
+        {
+            if (this.ViewState["CaseUserName"] == null)
+                return "";
+
+            return this.ViewState["CaseUserName"].ToString();
+        }
+        set
+        {
+            this.ViewState["CaseUserName"] = value;
+
+        }
+    }
+
+
+    protected string HtmlUrl
+    {
+        get
+        {
+            if (this.ViewState["HtmlUrl"] == null)
+                return "";
+
+            return this.ViewState["HtmlUrl"].ToString();
+        }
+        set
+        {
+            this.ViewState["HtmlUrl"] = value;
+
+        }
+    }
+
+
+    protected string PatchName
+    {
+        get
+        {
+            if (this.ViewState["PatchName"] == null)
+                return "";
+            return this.ViewState["PatchName"].ToString();
+        }
+        set
+        {
+            this.ViewState["PatchName"] = value;
+
+        }
+    }
+
+    protected string Importtime
+    {
+        get
+        {
+            if (this.ViewState["Importtime"] == null)
+                return "";
+            return this.ViewState["Importtime"].ToString();
+        }
+        set
+        {
+            this.ViewState["Importtime"] = value;
+
+        }
+    }
+
+    protected string Balance
+    {
+        get
+        {
+            if (this.ViewState["Balance"] == null)
+                return "";
+            return this.ViewState["Balance"].ToString();
+        }
+        set
+        {
+            this.ViewState["Balance"] = value;
+
+        }
+    }
+
+    protected string Expiredate
+    {
+
+        get
+        {
+            if (this.ViewState["Expiredate"] == null)
+                return "";
+            return this.ViewState["Expiredate"].ToString();
+        }
+        set
+        {
+            this.ViewState["Expiredate"] = value;
+
+        }
+    }
+
+
+    protected string CaseID
+    {
+        get
+        {
+            return Request["id"].ToString();
+        }
+    }
+
+    protected string CompanyID
+    {
+        get
+        {
+            return Request["companyID"].ToString();
+        }
+    }
+
+    protected string HtmlContent
+    {
+        get
+        {
+            if (this.ViewState["HtmlContent"] == null)
+                return "";
+            return this.ViewState["HtmlContent"].ToString();
+        }
+        set
+        {
+            this.ViewState["HtmlContent"] = value;
+
+        }
+    }
+
+
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!this.IsPostBack)
+        {
+           
+
+            if (CompanyID == null)
+            {
+                this.divAll.Style.Add("display", "none");
+                Response.Write("No Content");
+                return;
+            }
+
+            if (base.IsAdmin || base.IsLeadofTheCompany(Request["companyID"]) )
+            {
+                FormContent();
+            }
+            else
+            {
+                Response.Redirect("Nopermission.htm");
+            }
+          
+        }
+    }
+
+    private void FormContent()
+    {
+        initData();
+        DrawHtml();
+        BindPaymentList();
+        FillPromiseDate();
+        GetNote();
+    }
+
+    private string GetJudgeCondition() //取得查找条件，根据唯一标识
+    {
+
+        DataRow[] drs = getJudgeFieldsDrs();
+        string con = "1=1 ";
+        foreach (DataRow dr in drs)
+        {
+            string field = dr["FieldName"].ToString();
+            con += " and " + field + " = '" + ItemRow[field].ToString() + "'";
+
+        }
+        return con;
+    }
+
+    private void GetNote()
+    {
+        DataSet ds = BLL.NoteBLL.GetNoteListByCaseID(CaseID);
+        DataTable dt = ds.Tables[0];
+        GetNoteHtmlByType0(dt);
+        GetNoteHtmlByType1(dt);
+        GetNoteHtmlByType2(dt);
+
+        this.divHistory.InnerHtml = this.txtNote0.Text;
+
+    }
+
+
+
+    private void GetNoteHtmlByType0(DataTable dt)
+    {
+        DataRow[] rows = dt.Select("NoteType=0");
+        StringBuilder sb = new StringBuilder();
+
+
+        foreach (DataRow dr in rows)
+        {
+            string str = "";
+            string temp = string.Format(NoteTemplate, dr["Body"].ToString(), dr["CreateBy"].ToString(), dr["CreateOn"].ToString(), str);
+            sb.AppendLine(temp);
+        }
+        txtNote0.Text = sb.ToString();
+    }
+
+
+
+
+    private void GetNoteHtmlByType1(DataTable dt)
+    {
+        DataRow[] rows = dt.Select("NoteType=1");
+        StringBuilder sb = new StringBuilder();
+
+
+        foreach (DataRow dr in rows)
+        {
+            string str = "电话：" + dr["Str1"].ToString() + "<br/>";
+            string temp = string.Format(NoteTemplate, dr["Body"].ToString(), dr["CreateBy"].ToString(), dr["CreateOn"].ToString(), str);
+            sb.AppendLine(temp);
+        }
+        txtNote1.Text = sb.ToString();
+    }
+
+    private void GetNoteHtmlByType2(DataTable dt)
+    {
+        DataRow[] rows = dt.Select("NoteType=2");
+        StringBuilder sb = new StringBuilder();
+
+
+        foreach (DataRow dr in rows)
+        {
+            string str = "路费：" + dr["Num1"].ToString() + "<br/>";
+            string temp = string.Format(NoteTemplate, dr["Body"].ToString(), dr["CreateBy"].ToString(), dr["CreateOn"].ToString(), str);
+            sb.AppendLine(temp);
+        }
+        txtNote2.Text = sb.ToString();
+    }
+
+
+    private void BindPaymentList()
+    {
+
+        string where = GetJudgeCondition();
+
+        DataSet ds = new BLL.PaymentBLL(int.Parse(CompanyID)).GetPaymentList(where);
+
+        this.GridView1.DataSource = ds;
+        this.GridView1.DataBind();
+    }
+
+    private void FillPromiseDate()
+    {
+
+        string PromisedDate = ItemRow["PromisedDate"].ToString();
+        if (PromisedDate != "")
+        {
+            this.txtDate.Text  = DateTime.Parse(PromisedDate).ToString("yyyy-MM-dd");
+        }
+    }
+
+    protected void GridView1_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+
+        if (e.Row.RowType == DataControlRowType.DataRow && e.Row.RowIndex != -1)
+        {
+            e.Row.Cells[1].Text = DateTime.Parse(e.Row.Cells[1].Text.Trim()).ToString("yyyy-MM-dd");
+
+        }
+    }
+
+
+
+    private void initData()
+    {
+        ItemRow = new BLL.CaseBLL(int.Parse(CompanyID)).GetCaseByID(CaseID).Tables[0].Rows[0];
+        TbFields = BLL.CompanyBLL.GetCacheFields(CompanyID, Common.Tools.CaseTableType).Tables[0];
+        Groups = GetGroups(TbFields);
+        ColumnsCount = base.CaseDisplayColumn;
+        SB = new StringBuilder();
+
+        GetPatchInfo();
+        GetNewBalanceInfo();
+    }
+
+    private void GetPatchInfo()
+    {
+        string patchID = ItemRow["PatchID"].ToString();
+        DataSet ds = BLL.PatchBLL.GetPatchByID(patchID);
+        DataRow dr = ds.Tables[0].Rows[0];
+        PatchName = dr["PatchName"].ToString();
+        Expiredate = DateTime.Parse(dr["ExpireDate"].ToString()).ToString("yyyy-MM-dd");
+        Importtime = DateTime.Parse(dr["ImportTime"].ToString()).ToString("yyyy-MM-dd");
+
+    }
+
+    private void GetNewBalanceInfo()
+    {
+        string where = GetJudgeCondition();
+        DataSet ds = new BLL.BalanceBLL(int.Parse(CompanyID)).GetBalanceList(where);
+        if (ds.Tables[0].Rows.Count != 0)
+        {
+            DataRow dr = ds.Tables[0].Rows[0];
+            Balance = DateTime.Parse(dr[0].ToString()).ToString("yyyy-MM-dd") + "&nbsp;&nbsp;&nbsp;&nbsp;" + dr[1].ToString();
+        }
+        else
+        {
+            Balance = DateTime.Now.ToString("yyyy-MM-dd") + "&nbsp;&nbsp;&nbsp;&nbsp;" + ItemRow["tbBalance"].ToString();
+        }
+
+    }
+
+    private void DrawHtml()
+    {
+        for (int i = 0; i < Groups.Count; i++)
+        {
+
+            DrawGroup(Groups[i].ToString());
+        }
+        HtmlContent = SB.ToString();
+
+    }
+
+    private void DrawGroup(string groupName)
+    {
+        string temp = string.Format(groupTemplete, groupName, 2 * ColumnsCount);
+        SB.AppendLine(temp);
+        DataRow[] drs = getDrsFromGroup(groupName);
+
+        int begin = 0;
+        string lineContent = "";
+
+        for (int i = 0; i < drs.Length; i++)
+        {
+            DataRow dr = drs[i];
+            string title = dr["FName"].ToString();
+            string field = dr["FieldName"].ToString();
+            string content = ItemRow[field].ToString().Trim();
+            string type = dr["FieldType"].ToString().ToLower();
+            string IsDisplay = dr["IsDisplay"].ToString().ToLower();
+
+            if (IsDisplay == "0")
+                continue;
+
+            if (field == "tbName")
+            {
+
+                CaseUserName = content;
+                HtmlUrl = Common.Tools.HtmlUrl + CaseUserName + ".htm";
+            }
+            if (field == "tbBalance" || field == "tbKey")
+            {
+
+                content = string.Format("<font color='red'>{0}</font>", content);
+            }
+
+            if (type == "datetime" && content.Length > 1)
+            {
+                content = DateTime.Parse(content).ToString("yyyy-MM-dd");
+            }
+            if (content == "")
+            {
+                content = "&nbsp;";
+            }
+
+            if (begin < ColumnsCount)
+            {
+                lineContent += string.Format(tdTemplete, title, content);
+
+                if (begin == ColumnsCount - 1) //last
+                {
+                    string thisRow = string.Format(trTemplete, lineContent);
+                    SB.AppendLine(thisRow);
+                }
+                else
+                {
+                    if (i == drs.Length - 1)
+                    {
+                        string thisRow = string.Format(trTemplete, lineContent);
+                        SB.AppendLine(thisRow);
+                    }
+                }
+                begin++;
+            }
+            else
+            {
+
+                lineContent = string.Format(tdTemplete, title, content);
+                begin = 1;
+            }
+
+        }
+
+    }
+
+
+    private DataRow[] getDrsFromGroup(string groupName)
+    {
+        return TbFields.Select("Misk='" + groupName + "'");
+    }
+
+    private DataRow[] getJudgeFieldsDrs()
+    {
+        return TbFields.Select("IsJudge='1'");
+    }
+
+
+    private ArrayList GetGroups(DataTable tb)
+    {
+        ArrayList ar = new ArrayList();
+        foreach (DataRow dr in tb.Rows)
+        {
+            if (!ar.Contains(dr["Misk"].ToString()))
+            {
+                ar.Add(dr["Misk"].ToString());
+            }
+        }
+        return ar;
+    }
+
+    protected void btn_Click(object sender, EventArgs e)
+    {
+
+        DateTime dt;
+        try
+        {
+            dt = DateTime.Parse(txtDate.Text);
+        }
+        catch
+        {
+            Alert("timeformatincorrect");
+            return;
+
+        }
+        new BLL.CaseBLL(int.Parse(CompanyID)).UpdateCasePromiseDate(dt, int.Parse(CaseID));
+        Alert("saveSuccess");
+        //divPromiseDate.InnerHtml = txtDate.Text;
+
+    }
+
+    protected void btnSaveNote_Click(object sender, EventArgs e)
+    {
+        decimal num = 0;
+        string phone = "";
+        if (this.txtType.Text == "2" && this.TextBox1.Text.Trim() != "")
+        {
+
+            num = decimal.Parse(this.TextBox1.Text);
+
+
+        }
+        else if (this.txtType.Text == "1")
+        {
+            phone = TextBox1.Text;
+
+
+        }
+        DateTime dt = DateTime.Now;
+        BLL.NoteBLL.InsertNote(txtNote.Text.Trim(), CurrentUser.UserName, int.Parse(txtType.Text), int.Parse(CaseID), num, phone, "", DateTime.MinValue, dt, int.Parse(CompanyID));
+
+
+        if (this.txtType.Text == "1")
+        {
+            string str = "电话：" + phone + "<br/>";
+            string temp = string.Format(NoteTemplate, txtNote.Text.Trim(), CurrentUser.UserName, dt, str);
+
+            this.txtNote1.Text = temp + this.txtNote1.Text;
+            this.divHistory.InnerHtml = this.txtNote1.Text;
+        }
+        else if (this.txtType.Text == "2")
+        {
+            string str = "路费：" + num.ToString() + "<br/>";
+            string temp = string.Format(NoteTemplate, txtNote.Text.Trim(), CurrentUser.UserName, dt, str);
+
+            this.txtNote2.Text = temp + this.txtNote2.Text;
+            this.divHistory.InnerHtml = this.txtNote2.Text;
+        }
+        else if (this.txtType.Text == "0")
+        {
+            string str = "";
+            string temp = string.Format(NoteTemplate, txtNote.Text.Trim(), CurrentUser.UserName, dt, str);
+
+            this.txtNote0.Text = temp + this.txtNote0.Text;
+            this.divHistory.InnerHtml = this.txtNote0.Text;
+        }
+
+        displayText();
+
+    }
+
+    private void displayText()
+    {
+
+
+
+        tr1.Style.Add("display", "block");
+        if (this.txtType.Text == "1")
+        {
+            span0.InnerText = "电话访问记录";
+            span1.InnerText = "电话";
+
+
+        }
+        else if (this.txtType.Text == "2")
+        {
+            span0.InnerText = "拜访记录";
+            span1.InnerText = "路费";
+        }
+
+        this.txtNote.Text = "";
+        this.TextBox1.Text = "";
+    }
+
+}

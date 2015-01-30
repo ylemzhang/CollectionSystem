@@ -1,0 +1,5 @@
+
+ALTER TABLE NoteTable ADD contactor nvarchar(10) NULL;
+ALTER TABLE NoteTable ADD contactorType nvarchar(20) NULL;
+ALTER TABLE NoteTable ADD contractResult nvarchar(20) NULL;
+
