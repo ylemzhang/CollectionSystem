@@ -219,20 +219,20 @@ public partial class AlertPayment : PageBase
         if (e.Row.RowType == DataControlRowType.DataRow && e.Row.RowIndex != -1)
         {
             string companyID = e.Row.Cells[1].Text;
-            string caseID = e.Row.Cells[10].Text;
+            string caseID = e.Row.Cells[9].Text;
             e.Row.Cells[0].Text = GetUserName(e.Row.Cells[0].Text.Trim());
             e.Row.Cells[1].Text = getCompanyName(e.Row.Cells[1].Text.Trim());
             e.Row.Cells[3].Text = GetPatchName(e.Row.Cells[3].Text.Trim());
-            e.Row.Cells[7].Text = GetDateString(e.Row.Cells[7].Text);
-            e.Row.Cells[9].Text = GetDateString(e.Row.Cells[9].Text);
+            e.Row.Cells[7].Text = GetDateString(e.Row.Cells[6].Text);
+            e.Row.Cells[9].Text = GetDateString(e.Row.Cells[8].Text);
             e.Row.Attributes.Add("ondblclick", "window.open('CaseDetail.aspx?act=" + Act + "&id=" + caseID + "&CompanyID=" + companyID + "','_blank')");
             e.Row.ToolTip = Common.StrTable.GetStr("dubbleClickToEdit");
-            e.Row.Cells[10].Visible = false;
+            e.Row.Cells[9].Visible = false;
 
         }
         else
         {
-            e.Row.Cells[9].Visible = false;
+            e.Row.Cells[8].Visible = false;
         }
 
 
