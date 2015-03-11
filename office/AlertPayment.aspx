@@ -53,7 +53,7 @@
            
               <asp:BoundField DataField="PatchID" HeaderText ="批号" />
               <asp:BoundField DataField="tbKey" HeaderText ="帐号/合同号" />
-         <%--     <asp:BoundField DataField="shouBie" HeaderText ="手别" /> --%>
+               
                <asp:BoundField DataField="tbPayment" HeaderText ="还款金额" />
                  <asp:BoundField DataField="tbPayDate" HeaderText ="还款日期"  ItemStyle-Width=80/>
  <asp:BoundField DataField="tbBalance" HeaderText ="现时金额" />

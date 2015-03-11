@@ -99,22 +99,13 @@ public partial class AlertPayment : PageBase
 
     private string GetSql(string where)
     {
-        string sqlTempate = "select {0} as CompanyID, c.ID,c.OwnerID,p.tbName,p.tbKey, p.tbPayment ,p.tbPayDate ,p.tbBalance, p.ImportDate, c.PatchID  from companypayment_{0} p inner join  companycase_{0}  c on p.tbkey=c.tbkey  where  {1} ";
+        string sqlTempate = "select {0} as CompanyID, c.ID,c.OwnerID,p.tbName,p.tbKey, p.tbPayment ,p.tbPayDate ,p.tbBalance, p.ImportDate, c.PatchID from companypayment_{0} p inner join  companycase_{0}  c on p.tbkey=c.tbkey  where  {1} ";
 
         StringBuilder sb = new StringBuilder();
 
 
         int count = companyDS.Tables[0].Rows.Count;
-        //string shouBieField = ",'0' as shouBie";
-        //显示手别
-        //string shouBieSql = string.Empty;
-        //shouBieSql = " select * from Field where (isdisplay is null or isdisplay=1)  and fname  like '%手别%' ";
-        //var dsShouBie = BLL.PaymentBLL.GetAlertPaymentList(shouBieSql);
-        //if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-        //{
-        //    shouBieField = string.Format(",c.{0} as shouBie ", ds.Tables[0].Rows[0][0]);
-        //}
-        
+
         for (int i = 0; i < count; i++)
         {
 
@@ -122,17 +113,7 @@ public partial class AlertPayment : PageBase
             string id = dr["ID"].ToString();
             if (HasCaseTable(id) && HasPaymentTable(id))
             {
-                //if (dsShouBie.Tables.Count > 0 && dsShouBie.Tables[0].Rows.Count > 0)
-                //{
-                //    for (int j = 0; j < dsShouBie.Tables[0].Rows.Count;j++ )
-                //        if (dsShouBie.Tables[0].Rows[j]["companyid"].ToString().Equals(id))
-                //        {
-                //            shouBieField = string.Format(",c.{0} as shouBie ", dsShouBie.Tables[0].Rows[j]["FieldName"]);
-                //            break;
-                //        }                    
-                //}
                 string tempsql = string.Format(sqlTempate, id, where);
-                //shouBieField = ",'0' as shouBie";
                 sb.AppendLine(tempsql);
                 sb.AppendLine("Union All");
             }
@@ -160,24 +141,14 @@ public partial class AlertPayment : PageBase
             sqlTempate = sqlTempate + " and c.OwnerID = " + CurrentUser.ID;
         }
 
-        //string shouBieField = ",'0' as shouBie";
-
         if (ddlCompany.SelectedIndex > 0)
         {
-            ////显示手别
-            //string shouBieSql = string.Empty;
-            //shouBieSql = string.Format(" select FieldName from Field where (isdisplay is null or isdisplay=1) and companyid ={0} and fname  like '%手别%' "
-            //                        ,ddlCompany.SelectedItem.Value);
-            //var ds= BLL.PaymentBLL.GetAlertPaymentList(shouBieSql);
-            //if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-            //{
-            //    shouBieField = string.Format(",c.{0} as shouBie ", ds.Tables[0].Rows[0][0]);
-            //}
+
+
             return string.Format(sqlTempate, ddlCompany.SelectedItem.Value, where);
         }
         else
         {
-            
             return GetSql(where);
 
 
@@ -193,7 +164,8 @@ public partial class AlertPayment : PageBase
         if (sql == "")
         {
             return;
-        }        
+        }
+
        
         DataSet ds = BLL.PaymentBLL.GetAlertPaymentList(sql);
         TotalRecord = ds.Tables[0].Rows.Count.ToString();
@@ -223,8 +195,8 @@ public partial class AlertPayment : PageBase
             e.Row.Cells[0].Text = GetUserName(e.Row.Cells[0].Text.Trim());
             e.Row.Cells[1].Text = getCompanyName(e.Row.Cells[1].Text.Trim());
             e.Row.Cells[3].Text = GetPatchName(e.Row.Cells[3].Text.Trim());
-            e.Row.Cells[7].Text = GetDateString(e.Row.Cells[6].Text);
-            e.Row.Cells[9].Text = GetDateString(e.Row.Cells[8].Text);
+            e.Row.Cells[6].Text = GetDateString(e.Row.Cells[6].Text);
+            e.Row.Cells[8].Text = GetDateString(e.Row.Cells[8].Text);
             e.Row.Attributes.Add("ondblclick", "window.open('CaseDetail.aspx?act=" + Act + "&id=" + caseID + "&CompanyID=" + companyID + "','_blank')");
             e.Row.ToolTip = Common.StrTable.GetStr("dubbleClickToEdit");
             e.Row.Cells[9].Visible = false;
